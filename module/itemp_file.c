@@ -54,11 +54,20 @@ long itemp_ioctl(struct file *file, unsigned int ioc, unsigned long arg)
       break;
     }
 
+    // IA32_THERM_STATUS
     err = rdmsr_safe_on_cpu(cpu, 0x19C, &l, &h);
     if (err) break;
+    cputemp = (l & 0x07F0000) >> 16;
 
-    printk(KERN_CRIT "itemp: high=%x low=%x\n", h, l);
-    cputemp = (l & 0x78000000) >> 27;
+    // IA32_TEMPERATURE_TARGET
+    err = rdmsr_safe_on_cpu(cpu, 0x1A2, &l, &h);
+    if (err) {
+      cputemp = 100 - cputemp;
+    } else {
+      cputemp = (l >> 16) & 0xFF - cputemp;
+    }
+    err = 0;
+
     if (copy_to_user(temp, &cputemp, sizeof(*temp))) {
       err = -EFAULT;
       break;

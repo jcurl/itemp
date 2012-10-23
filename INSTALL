@@ -9,6 +9,54 @@ are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.  This file is offered as-is,
 without warranty of any kind.
 
+Foreword
+========
+This document covers the major details of building the test program
+"cputest" tha is used to open and access the kernel module "itemp.ko".
+You need to build and install the kernel module first.
+
+Building the Kernel Module
+==========================
+The configure build system described here doesn't cover building
+the Kernel module. This should be done first before building the
+test program.
+
+To build the kernel module type:
+$ cd module
+$ make
+
+You should have the kernel headers for your architecture currently
+installed. Once the kernel module is built, you should copy the
+udev rule
+
+$ cp udev/70-cputemp.rules /etc/udev/rules.d/
+
+Then once your module is built, install it using:
+
+$ sudo insmod ./itemp.ko
+
+Check that it is running with:
+
+$ ls /dev/cpu/*/temp
+/dev/cpu/0/temp  /dev/cpu/1/temp
+
+This shows that you have two CPUs.
+
+
+Quick building the test program
+===============================
+Type the following to build the test program, to get the temperature
+of your CPU
+
+$ cd ..
+$ ./configure CFLAGS="-I$PWD/module"
+$ make
+$ cputemp/cputemp
+Error reading MSR 0x19c: Input/output error (5)
+CPU temp: 52
+
+
+
 Basic Installation
 ==================
 

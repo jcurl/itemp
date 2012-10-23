@@ -1,0 +1,22 @@
+This is a very simple example of writing a kernel driver. It does something useful however - it reads the
+temperature of Intel CPUs using Intel's MSR (Machine Specific Register) for processors that support it.
+
+It provides the following features:
+* Registers in the /sys/class/itemp namespace so that udev can automatically create a /dev entry on module
+  insertion
+** The model is similar to that used by "msr" and "cpuid" drivers.
+* A udev rule exists that you can copy to /etc/udev/rules.d
+* ioctl() interface for reading the temperature per cpu node
+** This module doesn't take into account hyperthreading. Reading the temperature on two cpu threads that
+   belong to the same core should result in the same temperature. You should use CPUID to know if your
+   machine supports hyperthreading or not.
+* ioctl() interface for reading the temperature per cpu node
+
+
+Work to do:
+* Provide an option on the command line to define what the Tjmax value is (default is 100)
+* Provide a /proc interface for reading the temperature for all cores
+* Improve the build system.
+
+
+
