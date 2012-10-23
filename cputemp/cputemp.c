@@ -27,7 +27,7 @@ void getcputemp()
   if (err < 0) {
     printf("Error reading temperature: %s (%d)\n", strerror(errno), errno);
   } else {
-    printf("CPU temp: %d", temp);
+    printf("CPU temp: %d\n", temp);
   }
 
   close(fd);

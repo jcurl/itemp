@@ -1,0 +1,1 @@
+SUBSYSTEM=="itemp", OWNER="root", GROUP="root", MODE="444"
