@@ -6,6 +6,8 @@
 #include <linux/device.h>
 #include <linux/cdev.h>
 
+extern int itemp_tjmax;
+
 extern int itemp_major;
 extern int itemp_minor;
 extern dev_t itemp_dev;
