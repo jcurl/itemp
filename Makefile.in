@@ -16,8 +16,8 @@
 @SET_MAKE@
 
 ##############################################################################
-# $URL$
-# $Id$
+# $URL: https://svn.home.lan/linux/kernel/modules/itemp/trunk/Makefile.am $
+# $Id: Makefile.am 7 2012-10-24 08:11:06Z jcurl $
 ##############################################################################
 VPATH = @srcdir@
 am__make_dryrun = \
@@ -59,8 +59,9 @@ target_triplet = @target@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure AUTHORS COPYING \
-	ChangeLog INSTALL NEWS config/config.guess config/config.sub \
-	config/depcomp config/install-sh config/missing
+	ChangeLog INSTALL NEWS config/compile config/config.guess \
+	config/config.sub config/depcomp config/install-sh \
+	config/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \

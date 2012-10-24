@@ -16,8 +16,8 @@
 @SET_MAKE@
 
 ##############################################################################
-# $URL$
-# $Id$
+# $URL: https://svn.home.lan/linux/kernel/modules/itemp/trunk/cputemp/Makefile.am $
+# $Id: Makefile.am 7 2012-10-24 08:11:06Z jcurl $
 ##############################################################################
 
 VPATH = @srcdir@

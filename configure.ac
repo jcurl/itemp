@@ -64,6 +64,7 @@ AC_GNU_SOURCE
 
 dnl Check for the compiler
 AC_PROG_CC
+AM_PROG_CC_C_O
 
 dnl Check for the installer
 AC_PROG_INSTALL
@@ -101,13 +102,17 @@ AC_CHECK_HEADERS([itemp.h], [],
 
 AC_ARG_ENABLE(kernelmodule)
 AC_MSG_CHECKING([if we should build the kernel module])
-if test -e ./module/Kbuild; then
-  if test x$enable_kernelmodule == xno; then
-    KERNEL_MODULE=no
-  else
-    KERNEL_MODULE=yes
-  fi
-else
+KERNEL_MODULE=yes
+# Disable compiling the kernel module if explicitly told to do so
+if test x$enable_kernelmodule == xno; then
+  KERNEL_MODULE=no
+fi
+# Don't support cross-compiling the kernel module
+if test x$cross_compiling == xyes; then
+  KERNEL_MODULE=no
+fi
+# Don't build if it isn't present (e.g. VPATH builds)
+if test ! -e ./module/Kbuild; then
   KERNEL_MODULE=no
 fi
 AM_CONDITIONAL([BUILD_KERNEL_MODULE], [test $KERNEL_MODULE == "yes"])
