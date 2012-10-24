@@ -1,6 +1,8 @@
 Installation Instructions
 *************************
 
+Copyright (C) 2012, Jason Curl
+
 Copyright (C) 1994-1996, 1999-2002, 2004-2011 Free Software Foundation,
 Inc.
 
@@ -15,19 +17,51 @@ This document covers the major details of building the test program
 "cputest" tha is used to open and access the kernel module "itemp.ko".
 You need to build and install the kernel module first.
 
-Building the Kernel Module
-==========================
-The configure build system described here doesn't cover building
-the Kernel module. This should be done first before building the
-test program.
+Configuring and Building the Kernel Module
+==========================================
+The Kernel module is designed so that it can be easily put in a kernel
+source tree (it uses the Kbuild file), or it can be built outside of
+the Kernel sources (but the Kernel build system must still be present).
 
-To build the kernel module type:
-$ cd module
-$ make
+When you configure the package, it checks automatically if it can build
+the kernel module or not. This only works if you're building "in-tree",
+that is, you're not using VPATH builds.
 
-You should have the kernel headers for your architecture currently
-installed. Once the kernel module is built, you should copy the
-udev rule
+For example
+
+  $ ./configure
+
+This will see the kernel module and build it
+
+  $ ../itemp/configure
+
+This will not see the kernel module, and so it won't be built
+
+You don't even need to use "configure" to build the kernel sources.
+It is possible to build it directly (it doesn't use autotools for the
+build)
+
+  $ cd module
+  $ make
+
+You need to be sure you have the kernel includes (along with the
+build system) present when building the kernel module
+
+Building without the Kernel Module
+==================================
+If you only want to build the test program without the kernel module,
+you need to use configure. Pass the option "--disable-kernelmodule"
+on the configure command line. It will then not traverse into the
+kernel module build. Or perform a VPATH build.
+
+Kernel Module UDEV rule
+=======================
+The kernel module also comes with a udev rule, that will automatically
+set up the correct permissions when the module is inserted. This can
+be installed on your local machine to allow easier debugging (that is,
+udev will automatically create the links with the correct permissions).
+
+This rule was tested with udev version 175 (ubuntu 12.10).
 
 $ cp udev/70-cputemp.rules /etc/udev/rules.d/
 
@@ -41,7 +75,6 @@ $ ls /dev/cpu/*/temp
 /dev/cpu/0/temp  /dev/cpu/1/temp
 
 This shows that you have two CPUs.
-
 
 Quick building the test program
 ===============================

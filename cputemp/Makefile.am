@@ -5,5 +5,6 @@
 
 bin_PROGRAMS = cputemp
 
+cputemp_CFLAGS = @KERNEL_CFLAGS@
 cputemp_SOURCES = cputemp.c
 

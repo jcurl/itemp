@@ -7,3 +7,5 @@ all:
 clean:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
 
+distclean:
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean

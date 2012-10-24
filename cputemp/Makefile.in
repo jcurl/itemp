@@ -71,9 +71,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_cputemp_OBJECTS = cputemp.$(OBJEXT)
+am_cputemp_OBJECTS = cputemp-cputemp.$(OBJEXT)
 cputemp_OBJECTS = $(am_cputemp_OBJECTS)
 cputemp_LDADD = $(LDADD)
+cputemp_LINK = $(CCLD) $(cputemp_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
@@ -117,6 +119,7 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+KERNEL_CFLAGS = @KERNEL_CFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -191,6 +194,7 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+cputemp_CFLAGS = @KERNEL_CFLAGS@
 cputemp_SOURCES = cputemp.c
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -284,7 +288,7 @@ clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 cputemp$(EXEEXT): $(cputemp_OBJECTS) $(cputemp_DEPENDENCIES) $(EXTRA_cputemp_DEPENDENCIES) 
 	@rm -f cputemp$(EXEEXT)
-	$(LINK) $(cputemp_OBJECTS) $(cputemp_LDADD) $(LIBS)
+	$(cputemp_LINK) $(cputemp_OBJECTS) $(cputemp_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -292,7 +296,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cputemp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cputemp-cputemp.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -307,6 +311,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+cputemp-cputemp.o: cputemp.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cputemp_CFLAGS) $(CFLAGS) -MT cputemp-cputemp.o -MD -MP -MF $(DEPDIR)/cputemp-cputemp.Tpo -c -o cputemp-cputemp.o `test -f 'cputemp.c' || echo '$(srcdir)/'`cputemp.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/cputemp-cputemp.Tpo $(DEPDIR)/cputemp-cputemp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='cputemp.c' object='cputemp-cputemp.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cputemp_CFLAGS) $(CFLAGS) -c -o cputemp-cputemp.o `test -f 'cputemp.c' || echo '$(srcdir)/'`cputemp.c
+
+cputemp-cputemp.obj: cputemp.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cputemp_CFLAGS) $(CFLAGS) -MT cputemp-cputemp.obj -MD -MP -MF $(DEPDIR)/cputemp-cputemp.Tpo -c -o cputemp-cputemp.obj `if test -f 'cputemp.c'; then $(CYGPATH_W) 'cputemp.c'; else $(CYGPATH_W) '$(srcdir)/cputemp.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/cputemp-cputemp.Tpo $(DEPDIR)/cputemp-cputemp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='cputemp.c' object='cputemp-cputemp.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(cputemp_CFLAGS) $(CFLAGS) -c -o cputemp-cputemp.obj `if test -f 'cputemp.c'; then $(CYGPATH_W) 'cputemp.c'; else $(CYGPATH_W) '$(srcdir)/cputemp.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

@@ -627,6 +627,9 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+BUILD_KERNEL_MODULE_FALSE
+BUILD_KERNEL_MODULE_TRUE
+KERNEL_CFLAGS
 EGREP
 GREP
 CPP
@@ -728,6 +731,7 @@ ac_user_opts='
 enable_option_checking
 enable_maintainer_mode
 enable_dependency_tracking
+enable_kernelmodule
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1361,6 +1365,7 @@ Optional Features:
 			  (and sometimes confusing) to the casual installer
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
+
 
 Some influential environment variables:
   CC          C compiler command
@@ -2043,6 +2048,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
 ac_aux_dir=
 for ac_dir in config "$srcdir"/config; do
   if test -f "$ac_dir/install-sh"; then
@@ -2070,8 +2076,6 @@ fi
 ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
 ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
-
-
 
 
 
@@ -4975,15 +4979,57 @@ if test "x$ac_cv_header_itemp_h" = xyes; then :
 _ACEOF
 
 else
+  for ac_header in $PWD/${srcdir}/module/itemp.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+ KERNEL_CFLAGS="-I$PWD/${srcdir}/module"
+
+else
   as_fn_error $? "
 **
 ** You need to provide the location of the itemp header
-** e.g. ./configure CFLAGS=\"-I$PWD/../module\"
+** e.g. ./configure CFLAGS=\"-I\$PWD/module\"
 **" "$LINENO" 5
 fi
 
 done
 
+fi
+
+done
+
+
+# Check whether --enable-kernelmodule was given.
+if test "${enable_kernelmodule+set}" = set; then :
+  enableval=$enable_kernelmodule;
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if we should build the kernel module" >&5
+$as_echo_n "checking if we should build the kernel module... " >&6; }
+if test -e ./module/Kbuild; then
+  if test x$enable_kernelmodule == xno; then
+    KERNEL_MODULE=no
+  else
+    KERNEL_MODULE=yes
+  fi
+else
+  KERNEL_MODULE=no
+fi
+ if test $KERNEL_MODULE == "yes"; then
+  BUILD_KERNEL_MODULE_TRUE=
+  BUILD_KERNEL_MODULE_FALSE='#'
+else
+  BUILD_KERNEL_MODULE_TRUE='#'
+  BUILD_KERNEL_MODULE_FALSE=
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $KERNEL_MODULE" >&5
+$as_echo "$KERNEL_MODULE" >&6; }
 
 
 ac_config_files="$ac_config_files Makefile cputemp/Makefile"
@@ -5120,6 +5166,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${BUILD_KERNEL_MODULE_TRUE}" && test -z "${BUILD_KERNEL_MODULE_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_KERNEL_MODULE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

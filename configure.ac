@@ -33,14 +33,12 @@ AC_INIT([CpuTemp], [1.0.0], [jcurl@arcor.de], [cputemptest])
 
 dnl We want to have all the intermediate configuration files in a separate
 dnl directory for cleanliness.
+AC_CONFIG_SRCDIR(cputemp/cputemp.c)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR([m4])
 
 dnl Plug in the revision of this file
-AC_REVISION([$Id: $])
-
-dnl Say where the source files are kept
-AC_CONFIG_SRCDIR(cputemp/cputemp.c)
+AC_REVISION([$Id$])
 
 dnl Figure out what we're building
 AC_CANONICAL_BUILD
@@ -91,11 +89,29 @@ if test "x$ac_cv_header_stdc" != xyes; then
 fi
 
 dnl Check for headers
-AC_CHECK_HEADERS([itemp.h], [], [AC_MSG_ERROR([
+AC_CHECK_HEADERS([itemp.h], [], 
+  [AC_CHECK_HEADERS([$PWD/${srcdir}/module/itemp.h], 
+    [KERNEL_CFLAGS="-I$PWD/${srcdir}/module"
+     AC_SUBST(KERNEL_CFLAGS)], 
+    [AC_MSG_ERROR([
 **
 ** You need to provide the location of the itemp header
-** e.g. ./configure CFLAGS="-I$PWD/../module"
-**])], [])
+** e.g. ./configure CFLAGS="-I\$PWD/module"
+**])], [])], [])
+
+AC_ARG_ENABLE(kernelmodule)
+AC_MSG_CHECKING([if we should build the kernel module])
+if test -e ./module/Kbuild; then
+  if test x$enable_kernelmodule == xno; then
+    KERNEL_MODULE=no
+  else
+    KERNEL_MODULE=yes
+  fi
+else
+  KERNEL_MODULE=no
+fi
+AM_CONDITIONAL([BUILD_KERNEL_MODULE], [test $KERNEL_MODULE == "yes"])
+AC_MSG_RESULT([$KERNEL_MODULE])
 
 dnl =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dnl We're near the end now
